@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/gprstorage-client/static/css/main.5f361e03.chunk.css",
+    "main.js": "/gprstorage-client/static/js/main.ca2b0da9.chunk.js",
+    "main.js.map": "/gprstorage-client/static/js/main.ca2b0da9.chunk.js.map",
+    "runtime-main.js": "/gprstorage-client/static/js/runtime-main.0e73e67e.js",
+    "runtime-main.js.map": "/gprstorage-client/static/js/runtime-main.0e73e67e.js.map",
+    "static/js/2.7eed6e3e.chunk.js": "/gprstorage-client/static/js/2.7eed6e3e.chunk.js",
+    "static/js/2.7eed6e3e.chunk.js.map": "/gprstorage-client/static/js/2.7eed6e3e.chunk.js.map",
+    "index.html": "/gprstorage-client/index.html",
+    "precache-manifest.2f05dd7a3d92eadf89404a17caa1180f.js": "/gprstorage-client/precache-manifest.2f05dd7a3d92eadf89404a17caa1180f.js",
+    "service-worker.js": "/gprstorage-client/service-worker.js",
+    "static/css/main.5f361e03.chunk.css.map": "/gprstorage-client/static/css/main.5f361e03.chunk.css.map",
+    "static/js/2.7eed6e3e.chunk.js.LICENSE.txt": "/gprstorage-client/static/js/2.7eed6e3e.chunk.js.LICENSE.txt",
+    "static/media/logo.svg": "/gprstorage-client/static/media/logo.5d5d9eef.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.0e73e67e.js",
+    "static/js/2.7eed6e3e.chunk.js",
+    "static/css/main.5f361e03.chunk.css",
+    "static/js/main.ca2b0da9.chunk.js"
+  ]
+}
