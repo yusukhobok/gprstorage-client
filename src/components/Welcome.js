@@ -5,7 +5,7 @@ class Welcome extends React.Component {
   render() {
     return (
         <Jumbotron>
-        <h1>Онлайн-хранилище георадарных данных</h1>
+        <h1>ООО "ТИМ"</h1>
       </Jumbotron>
     );
   }

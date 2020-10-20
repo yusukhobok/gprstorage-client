@@ -1,37 +1,33 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { Fragment } from "react";
 
+import { OK_STATUS, STATUS_NOT_LOGGED, STATUS_REGISTRATING, STATUS_ENTERING, STATUS_LOGGED, PAGE_PROJECTS, PAGE_RADARGRAMS } from "./Global";
+import Logic from "./logic/Logic";
+
 import MainMenu from "./components/MainMenu";
 // import Rad from "./components/Rad";
 // import ProjectOptions from "./components/ProjectOptions";
 import Sign from "./components/Sign";
 import Welcome from "./components/Welcome";
-
-import axios from "axios";
-
-
-const API_URL = "https://gprstorage-stage.herokuapp.com/api";
-
-const STATUS_NOT_LOGGED = "STATUS_NOT_LOGGED"
-const STATUS_REGISTRATING = "STATUS_REGISTRATING"
-const STATUS_ENTERING = "STATUS_ENTERING"
-const STATUS_LOGGED = "STATUS_LOGGED"
-
+import Projects from "./components/Projects";
+import Radargrams from "./components/Radargrams";
 
 class App extends React.Component {
   constructor() {
     super();
+    this.logic = new Logic();
     this.state = {
       status: STATUS_LOGGED, //STATUS_NOT_LOGGED,
-      username: "yuri", //null,
+      page: PAGE_PROJECTS,
       sign_error: null,
-
+      is_loaded_data: false,
       waiting: false,
-      projects: [],
-      currentProjectId: null,
-      radaragrams: [],
-      currentRadargramId: null,
     };
+
+  }
+
+  async componentDidMount() {
+    this.getProjects();
   }
 
 
@@ -46,35 +42,109 @@ class App extends React.Component {
 
 
   registrate = async (username, password) => {
-    try {
-      await axios.post(`${API_URL}/users/registration`, { username, password });
-      this.updateState({ "status": STATUS_LOGGED, username, sign_error: null })
-      console.log(this.state);
+    const res = await this.logic.authLogic.registrate(username, password);
+    if (res["status"] === OK_STATUS) {
+      this.getProjects();
+      this.updateState({ "status": STATUS_LOGGED, sign_error: null });
     }
-    catch (error) {
-      console.log(error.message);
-      this.updateState({ sign_error: "Пользователь с таким именем уже зарегистрирован" })
-    }
+    else
+      this.updateState({ sign_error: res["message"] });
   }
 
 
   logIn = async (username, password) => {
-    try {
-      const res = await axios.post(`${API_URL}/users/signin`, { username, password });
-      console.log(res);
-      this.updateState({ "status": STATUS_LOGGED, username, sign_error: null })
-      console.log(this.state);
+    const res = await this.logic.authLogic.logIn(username, password);
+    if (res["status"] === OK_STATUS) {
+      this.getProjects();
+      this.updateState({ "status": STATUS_LOGGED, sign_error: null });
     }
-    catch (error) {
-      console.log(error.message);
-      this.updateState({ sign_error: "Имя пользователя или пароль введены неверно" })
-    }
+    else
+      this.updateState({ sign_error: res["message"] });
+
   }
 
 
   logOut = async () => {
-    this.updateState({ "status": STATUS_NOT_LOGGED, username: null, sign_error: null })
+    this.updateState({ "status": STATUS_NOT_LOGGED, sign_error: null });
   }
+
+
+  getProjects = async () => {
+    if (this.state.waiting) return;
+    this.updateState({ waiting: true });
+    const res = await this.logic.getProjects()
+    if (res["status"] === OK_STATUS)
+      this.updateState({ is_loaded_data: true, waiting: false })
+    else
+      this.updateState({ waiting: false })
+  }
+
+
+  addProject = async (name, notes) => {
+    if (this.state.waiting) return;
+    this.updateState({ waiting: true });
+    const res = await this.logic.addProject(name, notes)
+    if (res["status"] === OK_STATUS)
+      this.updateState({ is_loaded_data: true, waiting: false })
+    else
+      this.updateState({ waiting: false })
+  }
+
+
+  changeProject = async (projectId, name, notes) => {
+    if (this.state.waiting) return;
+    this.updateState({ waiting: true });
+    const res = await this.logic.updateProject(projectId, name, notes)
+    if (res["status"] === OK_STATUS)
+      this.updateState({ is_loaded_data: true, waiting: false })
+    else
+      this.updateState({ waiting: false })
+  }
+
+
+  deleteProject = async (projectId) => {
+    if (this.state.waiting) return;
+    this.updateState({ waiting: true });
+    const res = await this.logic.deleteProject(projectId)
+    if (res["status"] === OK_STATUS)
+      this.updateState({ is_loaded_data: true, waiting: false })
+    else
+      this.updateState({ waiting: false })
+  }
+
+  openProject = async (projectId) => {
+    if (this.state.waiting) return;
+    this.updateState({ waiting: true });
+    const res = await this.logic.openProject(projectId)
+    if (res["status"] === OK_STATUS) {
+      this.updateState({ is_loaded_data: true, waiting: false, page: PAGE_RADARGRAMS })
+    }
+    else {
+      this.updateState({ waiting: false, page: PAGE_PROJECTS })
+    }
+  }
+
+  closeProject = () => {
+    this.updateState({ page: PAGE_PROJECTS })
+  }
+
+
+  deleteRadargram = async (projectId, radargramId) => {
+    if (this.state.waiting) return;
+    this.updateState({ waiting: true });
+    const res = await this.logic.deleteRadargram(projectId, radargramId)
+    if (res["status"] === OK_STATUS)
+      this.updateState({ waiting: false, page: PAGE_PROJECTS })
+    else
+      this.updateState({ waiting: false })
+  }
+
+  
+  getRadargramLink = async (projectId, radargramId) => {
+    const res = await this.logic.getRadargramLink(projectId, radargramId)
+    window.open(res.link);
+  }
+
 
 
   onSelectMenuElement = (selectedKey) => {
@@ -94,11 +164,44 @@ class App extends React.Component {
   }
 
 
+  getCurrentComponent = () => {
+    switch (this.state.page) {
+      case PAGE_PROJECTS:
+        return (
+          <Projects
+            projects={this.logic.projects}
+            currentProjectId={this.logic.currentProjectId}
+            addProject={this.addProject}
+            changeProject={this.changeProject}
+            openProject={this.openProject}
+            deleteProject={this.deleteProject}
+          />
+        )
+      case PAGE_RADARGRAMS:
+        return (
+          <Radargrams 
+            radargrams={this.logic.radargrams}
+            project={this.logic.getCurrentProject()}
+            closeProject={this.closeProject}
+            deleteRadargram={this.deleteRadargram}
+            getRadargramLink={this.getRadargramLink}
+          />
+        )
+      default:
+        break
+    }
+  }
+
   render() {
     let CurrentComponent = null;
     switch (this.state.status) {
       case STATUS_LOGGED:
-        CurrentComponent = <p>Let's start working!</p> //<Main />
+        if (this.state.waiting) {
+          CurrentComponent = <Welcome />
+        }
+        else {
+          CurrentComponent = this.getCurrentComponent();
+        }
         break
       case STATUS_NOT_LOGGED:
         CurrentComponent = <Welcome />
@@ -114,11 +217,8 @@ class App extends React.Component {
     }
     return (
       <Fragment>
-
-        <MainMenu username={this.state.username} logged={this.state.status === STATUS_LOGGED} onSelectMenuElement={this.onSelectMenuElement} />
+        <MainMenu username={this.logic.authLogic.username} logged={this.state.status === STATUS_LOGGED} onSelectMenuElement={this.onSelectMenuElement} />
         {CurrentComponent}
-
-
       </Fragment>
     )
   }

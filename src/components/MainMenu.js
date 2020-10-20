@@ -1,13 +1,13 @@
 import React, { Fragment } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import Badge from "react-bootstrap/Badge";
 import Button from "react-bootstrap/Button";
 
 class MainMenu extends React.Component {
   render() {
     return (
       <Navbar bg="light" expand="lg">
+        <Navbar.Brand>Хранилище радарограмм</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto" onSelect={this.props.onSelectMenuElement}>

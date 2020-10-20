@@ -2,7 +2,8 @@ import React from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import Toast from "react-bootstrap/Toast";
+import Alert from "react-bootstrap/Alert";
+import Spinner from "react-bootstrap/Spinner";
 
 
 class Sign extends React.Component {
@@ -10,35 +11,38 @@ class Sign extends React.Component {
     super(props);
     this.state = {
       username: "",
-      password: ""
+      password: "",
+      loading: false
     };
   }
 
-  onChangeUsername = (event) => {
-    const username = event.target.value;
+  updateState = (newState) => {
     this.setState((prevState) => {
       return {
         ...prevState,
-        username
+        ...newState
       };
     });
+  }
+
+
+  onChangeUsername = (event) => {
+    const username = event.target.value;
+    this.updateState({ username });
   }
 
   onChangePassword = (event) => {
     const password = event.target.value;
-    this.setState((prevState) => {
-      return {
-        ...prevState,
-        password
-      };
-    });
+    this.updateState({ password });
   }
 
-  onOk = (event) => {
+  onOk = async (event) => {
     if (event === undefined) return;
     if (this.state.username === "" || this.state.password === "") return;
     event.preventDefault();
-    this.props.onOkSign(this.state.username, this.state.password);
+    this.updateState({ loading: true })
+    await this.props.onOkSign(this.state.username, this.state.password);
+    this.updateState({ loading: false })
   }
 
   onCancel = (event) => {
@@ -46,14 +50,19 @@ class Sign extends React.Component {
     this.props.onCancelSign(this.state.username, this.state.password);
   }
 
-
   render() {
-    let toast = null;
+    let alert = null;
     if (this.props.error) {
-    toast =
-      <Toast delay={3000} autohide>
-        <Toast.Body>{this.props.error}</Toast.Body>
-      </Toast>
+      alert = <Alert variant="danger">
+        {this.props.error}
+      </Alert>
+    }
+
+    let spinner = null;
+    if (this.state.loading) {
+      spinner = <Spinner animation="border" role="status">
+        <span className="sr-only">Loading...</span>
+      </Spinner>
     }
 
     return (
@@ -84,9 +93,10 @@ class Sign extends React.Component {
               />
             </Form.Group>
           </Form>
-          {toast}
+          {alert}
         </Modal.Body>
         <Modal.Footer>
+          { spinner }
           <Button variant="primary" onClick={this.onOk}>
             ОК
           </Button>
