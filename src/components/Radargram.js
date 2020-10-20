@@ -42,6 +42,10 @@ class Radargram extends React.Component {
         await this.props.getRadargramLink(projectId, radargramId);
     }
 
+    onCollapseRadargram = () => {
+        console.log("HELLO");
+    }
+
     render() {
         return (
 
@@ -80,7 +84,7 @@ class Radargram extends React.Component {
                 </Card>
                 <Card>
                     <Card.Header>
-                        <Accordion.Toggle as={Button} variant="link" eventKey="1">
+                        <Accordion.Toggle as={Button} variant="link" eventKey="1" onClick={this.onCollapseRadargram}>
                             Радарограмма
                         </Accordion.Toggle>
                     </Card.Header>

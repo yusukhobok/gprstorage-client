@@ -4,33 +4,58 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import ListGroup from "react-bootstrap/ListGroup";
 import Nav from "react-bootstrap/Nav";
+
 import Radargram from "./Radargram";
+import DialogOpenRad from "./DialogOpenRad";
+
 
 class Radargrams extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // name: "",
-      // notes: "",
-      // isOpenOptions: false,
-      // currentProjectId: null,
-      // isAddNewProject: false,
+      isOpenDialog: false
     };
   }
 
+  updateState = (newState) => {
+    this.setState((prevState) => {
+      return {
+        ...prevState,
+        ...newState
+      };
+    });
+  }  
+
   clearState = () => {
     this.updateState({
-      // name: "",
-      // notes: "",
-      // isOpenOptions: false,
-      // currentProjectId: null,
-      // isAddNewProject: false,
+      isOpenDialog: false
     });
+  }
+
+  cancelOpenRad = () => {
+    this.updateState({
+      isOpenDialog: false
+    });
+  }
+
+  openDialog = () => {
+    this.updateState({
+      isOpenDialog: true
+    });
+  }
+
+  fileUpload = (formData) => {
+    this.props.addRadargram(this.props.project.id, formData);
   }
 
   render() {
     return (
       <Fragment>
+        <DialogOpenRad 
+          show = {this.state.isOpenDialog}
+          onCancelOpenRad = {this.cancelOpenRad}
+          fileUpload = {this.fileUpload}
+        />
         <Nav
           activeKey="/home"
           onSelect={(selectedKey) => this.props.closeProject()}
@@ -58,7 +83,7 @@ class Radargrams extends React.Component {
                 }
               </ListGroup>
               <ListGroup.Item key={`listkey_new`}>
-                <a href="#">Добавить</a>
+                <a href="#" onClick={this.openDialog}>Добавить</a>
               </ListGroup.Item>
             </Col>
             <Col sm={10}>

@@ -139,10 +139,23 @@ class App extends React.Component {
       this.updateState({ waiting: false })
   }
 
-  
+
   getRadargramLink = async (projectId, radargramId) => {
     const res = await this.logic.getRadargramLink(projectId, radargramId)
     window.open(res.link);
+  }
+
+
+  addRadargram = async (projectId, formData) => {
+    if (this.state.waiting) return;
+    this.updateState({ waiting: true });
+    const res = await this.logic.uploadRadargram(projectId, formData)
+    if (res["status"] === OK_STATUS) {
+      await this.openProject(projectId);
+    }
+    else {
+      this.updateState({ waiting: false, page: PAGE_RADARGRAMS })
+    }
   }
 
 
@@ -185,6 +198,7 @@ class App extends React.Component {
             closeProject={this.closeProject}
             deleteRadargram={this.deleteRadargram}
             getRadargramLink={this.getRadargramLink}
+            addRadargram={this.addRadargram}
           />
         )
       default:

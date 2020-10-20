@@ -11,7 +11,6 @@ class Logic {
     }
 
     getCurrentProject() {
-        console.log(this.currentProjectId);
         if (this.currentProjectId === null)
           return null;
         else {
@@ -125,6 +124,22 @@ class Logic {
         catch (error) {
             return {"status": ERROR_STATUS, "message": error.message}
         }
+    }
+
+    async uploadRadargram(projectId, formData) {
+        try {
+            if (!this.authLogic.authorized) return {"error": "Пользователь не авторизован"}
+            const res = await axios.post(`${API_URL}/projects/${projectId}/radargrams`, formData, {
+                headers: {
+                  'Content-Type': 'multipart/form-data'
+                }
+            }, this.authLogic.getAuth());
+            console.log("uploadRadargram", res);
+            return await this.openProject(projectId);
+        }
+        catch (error) {
+            return {"status": ERROR_STATUS, "message": error.message}
+        }        
     }
 
     setRadargrams(radargrams) {
