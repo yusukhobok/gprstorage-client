@@ -83,7 +83,7 @@ class Radargrams extends React.Component {
                 }
               </ListGroup>
               <ListGroup.Item key={`listkey_new`}>
-                <a href="#" onClick={this.openDialog}>Добавить</a>
+                <a href="#add" onClick={this.openDialog}>Добавить</a>
               </ListGroup.Item>
             </Col>
             <Col sm={10}>
@@ -97,6 +97,8 @@ class Radargrams extends React.Component {
                         key={`radkey${item.id}`} 
                         deleteRadargram={this.props.deleteRadargram}
                         getRadargramLink={this.props.getRadargramLink}
+                        getTraces={this.props.getTraces}
+                        tracesCountOnPage={this.props.tracesCountOnPage}
                       />
                     </Tab.Pane>
                   ))

@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React from "react";
 
 import Accordion from "react-bootstrap/Accordion";
 import Card from "react-bootstrap/Card";
@@ -12,21 +12,22 @@ class Radargram extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // name: "",
-            // notes: "",
-            // isOpenOptions: false,
-            // currentProjectId: null,
-            // isAddNewProject: false,
+            amplitudes: null
         };
     }
 
     clearState = () => {
         this.updateState({
-            // name: "",
-            // notes: "",
-            // isOpenOptions: false,
-            // currentProjectId: null,
-            // isAddNewProject: false,
+            amplitudes: null
+        });
+    }
+
+    updateState = (newState) => {
+        this.setState((prevState) => {
+            return {
+                ...prevState,
+                ...newState
+            };
         });
     }
 
@@ -42,8 +43,19 @@ class Radargram extends React.Component {
         await this.props.getRadargramLink(projectId, radargramId);
     }
 
-    onCollapseRadargram = () => {
-        console.log("HELLO");
+    onCollapseRadargram = async () => {
+        console.log(this.state.amplitudes);
+        if (this.state.amplitudes !== null) return;
+        const projectId = this.props.project.id;
+        const radargramId = this.props.radargram.id;
+        const startNum = 0;
+        const finishNum = this.props.radargram.traces_count;
+        const stage = Math.ceil(this.props.radargram.traces_count / this.props.tracesCountOnPage);
+        const res = await this.props.getTraces(projectId, radargramId, startNum, finishNum, stage)
+        console.log(res);
+        this.updateState({
+            amplitudes: res.amplitudes
+        });
     }
 
     render() {
@@ -90,7 +102,11 @@ class Radargram extends React.Component {
                     </Card.Header>
                     <Accordion.Collapse eventKey="1">
                         <Card.Body>
-                            <RadImage project={this.props.project} radargram={this.props.radargram}/>
+                            <RadImage
+                                project={this.props.project}
+                                radargram={this.props.radargram}
+                                amplitudes={this.state.amplitudes}
+                            />
                         </Card.Body>
                     </Accordion.Collapse>
                 </Card>
@@ -102,8 +118,8 @@ class Radargram extends React.Component {
                     </Card.Header>
                     <Accordion.Collapse eventKey="2">
                         <Card.Body>
-                            <p><a href="#" onClick={this.deleteRadargram}>Удалить радарограмму</a></p>
-                            <p><a href="#" onClick={this.getRadargramLink}>Скачать радарограмму</a></p>
+                            <p><a href="#delete" onClick={this.deleteRadargram}>Удалить радарограмму</a></p>
+                            <p><a href="#download" onClick={this.getRadargramLink}>Скачать радарограмму</a></p>
                         </Card.Body>
                     </Accordion.Collapse>
                 </Card>

@@ -5,12 +5,11 @@ import { OK_STATUS, STATUS_NOT_LOGGED, STATUS_REGISTRATING, STATUS_ENTERING, STA
 import Logic from "./logic/Logic";
 
 import MainMenu from "./components/MainMenu";
-// import Rad from "./components/Rad";
-// import ProjectOptions from "./components/ProjectOptions";
 import Sign from "./components/Sign";
 import Welcome from "./components/Welcome";
 import Projects from "./components/Projects";
 import Radargrams from "./components/Radargrams";
+import Waiting from "./components/Waiting";
 
 class App extends React.Component {
   constructor() {
@@ -22,6 +21,7 @@ class App extends React.Component {
       sign_error: null,
       is_loaded_data: false,
       waiting: false,
+      tracesCountOnPage: 100,
     };
 
   }
@@ -158,6 +158,11 @@ class App extends React.Component {
     }
   }
 
+  getTraces = async(projectId, radargramId, startNum, finishNum, stage) => {
+    const res = await this.logic.getTraces(projectId, radargramId, startNum, finishNum, stage);
+    return res;
+  }
+
 
 
   onSelectMenuElement = (selectedKey) => {
@@ -199,6 +204,8 @@ class App extends React.Component {
             deleteRadargram={this.deleteRadargram}
             getRadargramLink={this.getRadargramLink}
             addRadargram={this.addRadargram}
+            getTraces={this.getTraces}
+            tracesCountOnPage={this.state.tracesCountOnPage}
           />
         )
       default:
@@ -211,7 +218,7 @@ class App extends React.Component {
     switch (this.state.status) {
       case STATUS_LOGGED:
         if (this.state.waiting) {
-          CurrentComponent = <Welcome />
+          CurrentComponent = <Waiting />
         }
         else {
           CurrentComponent = this.getCurrentComponent();

@@ -152,14 +152,14 @@ class Logic {
         try {
             if (!this.authLogic.authorized) return {"status": ERROR_STATUS, "message": "Пользователь не авторизован"}
             const res = await axios.get(`${API_URL}/projects/${projectId}/radargrams/${radargramId}/traces/amplitudes/${startNum}/${finishNum}/${stage}`, this.authLogic.getAuth());
-            console.log("getTraces", res);
-            return ({"status": OK_STATUS, "message": "Операция завершилась успешно"});
+            let amplitudes = res.data.amplitudes;
+            amplitudes = amplitudes[0].map((_, colIndex) => amplitudes.map(row => row[colIndex]));
+            return ({"status": OK_STATUS, "message": "Операция завершилась успешно", "amplitudes": amplitudes});
         }
         catch (error) {
             return {"status": ERROR_STATUS, "message": error.message}
         }
     }
-
 }
 
 export default Logic;

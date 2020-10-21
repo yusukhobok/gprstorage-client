@@ -39,10 +39,7 @@ class DialogOpenRad extends React.Component {
 
   onFileUpload = async (event) => {
     console.log("onFileUpload");
-    let data;
-    if (this.state.selectedFile === null) {
-      data = null;
-    } else {
+    if (this.state.selectedFile !== null) {
       let formData = new FormData();
       formData.append(
         "file",
