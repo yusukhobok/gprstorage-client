@@ -30,7 +30,7 @@ class RadImage extends React.Component {
     render() {
         return (
             <Plot
-                show={this.props.show}
+                // show= {this.props.amplitudes !== null}
                 data={[
                     {
                         //x: [10, 20, 30],
@@ -42,8 +42,8 @@ class RadImage extends React.Component {
                 ]}
                 layout={{
                     autosize: true,
-                    yaxis: { autorange: "reversed", title: { text: "Samples" } },
-                    xaxis: { title: { text: "Traces" } },
+                    yaxis: { autorange: "reversed", title: { text: "Временные отсчеты" } },
+                    xaxis: { title: { text: "Трассы" } },
                 }}
                 useResizeHandler={true}
                 config={{

@@ -4,9 +4,9 @@ import {API_URL, OK_STATUS, ERROR_STATUS} from "../Global";
 
 class AuthLogic {
     constructor() {
-        this.authorized = true; //false;
-        this.username = "yuri"; //"";
-        this.password = "123"; //"";
+        this.authorized = false;
+        this.username = "";
+        this.password = "";
     }
 
     getAuth() {

@@ -16,7 +16,7 @@ class App extends React.Component {
     super();
     this.logic = new Logic();
     this.state = {
-      status: STATUS_LOGGED, //STATUS_NOT_LOGGED,
+      status: STATUS_NOT_LOGGED,
       page: PAGE_PROJECTS,
       sign_error: null,
       is_loaded_data: false,
