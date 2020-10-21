@@ -42,7 +42,7 @@ class DialogOpenRad extends React.Component {
     if (this.state.selectedFile !== null) {
       let formData = new FormData();
       formData.append(
-        "file",
+        "datafile",
         this.state.selectedFile,
         this.state.selectedFile.name
       );

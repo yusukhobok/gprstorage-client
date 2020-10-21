@@ -130,10 +130,11 @@ class Logic {
         try {
             if (!this.authLogic.authorized) return {"error": "Пользователь не авторизован"}
             const res = await axios.post(`${API_URL}/projects/${projectId}/radargrams`, formData, {
-                headers: {
-                  'Content-Type': 'multipart/form-data'
-                }
-            }, this.authLogic.getAuth());
+                headers: { 'content-type': 'multipart/form-data' },
+                auth: { username: this.authLogic.username, password: this.authLogic.password } 
+            });
+            // const res = await axios.post(`${API_URL}/projects/${projectId}/radargrams`, this.authLogic.getAuth(), formData, {'Content-Type': 'multipart/form-data'});
+            // const res = await axios.post(`${API_URL}/projects/${projectId}/radargrams`, {aaa: "bbb"}, this.authLogic.getAuth());
             console.log("uploadRadargram", res);
             return await this.openProject(projectId);
         }
