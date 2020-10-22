@@ -151,9 +151,16 @@ class App extends React.Component {
     this.updateState({ waiting: true });
     const res = await this.logic.uploadRadargram(projectId, formData)
     if (res["status"] === OK_STATUS) {
-      await this.openProject(projectId);
+      const res = await this.logic.openProject(projectId)
+      if (res["status"] === OK_STATUS) {
+        this.updateState({ waiting: false, page: PAGE_RADARGRAMS })
+      }
+      else {
+        this.updateState({ waiting: false, page: PAGE_PROJECTS })
+      }
     }
     else {
+      alert("Не удалось загрузить радарограмму");
       this.updateState({ waiting: false, page: PAGE_RADARGRAMS })
     }
   }

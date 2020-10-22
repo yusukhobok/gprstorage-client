@@ -108,7 +108,7 @@ class Projects extends React.Component {
               this.props.projects.map((item, index, array) => (
                 <Card style={{ width: '18rem' }} key={item.id}>
                   <Card.Body>
-                    <Card.Title>{item.name} ({item.id})</Card.Title>
+                    <Card.Title>{item.name}</Card.Title>
                     <Card.Text>{item.notes}</Card.Text>
                     <Card.Link href="#" id={item.id} onClick={this.openProject}>Открыть</Card.Link>
                     <Card.Link href="#" id={item.id} onClick={this.openDialogToChangeProject}>Изменить</Card.Link>
