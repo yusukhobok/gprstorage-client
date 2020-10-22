@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/gprstorage-client/precache-manifest.5e82d691ac16e768b988c080eb6a02ee.js"
+  "/gprstorage-client/precache-manifest.36437722e7d93b791055a39c2b86fbd3.js"
 );
 
 self.addEventListener('message', (event) => {

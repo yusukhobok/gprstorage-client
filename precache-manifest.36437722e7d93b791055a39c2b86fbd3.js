@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "de0b203b83746bc3dab55245a5467e53",
+    "revision": "d8261a543393c51b568df00c7cc7f724",
     "url": "/gprstorage-client/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/gprstorage-client/static/css/2.d9ad5f5c.chunk.css"
   },
   {
-    "revision": "7ddb7ba7a5b97101acdd",
+    "revision": "0f7b24a0edc97597768b",
     "url": "/gprstorage-client/static/css/main.5ecd60fb.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/gprstorage-client/static/js/2.98bd8367.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "7ddb7ba7a5b97101acdd",
-    "url": "/gprstorage-client/static/js/main.cc906183.chunk.js"
+    "revision": "0f7b24a0edc97597768b",
+    "url": "/gprstorage-client/static/js/main.38a63e78.chunk.js"
   },
   {
     "revision": "4c28f620d7771e541d4f",
