@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/gprstorage-client/static/css/main.5ecd60fb.chunk.css",
-    "main.js": "/gprstorage-client/static/js/main.38a63e78.chunk.js",
-    "main.js.map": "/gprstorage-client/static/js/main.38a63e78.chunk.js.map",
+    "main.js": "/gprstorage-client/static/js/main.070f7325.chunk.js",
+    "main.js.map": "/gprstorage-client/static/js/main.070f7325.chunk.js.map",
     "runtime-main.js": "/gprstorage-client/static/js/runtime-main.0e73e67e.js",
     "runtime-main.js.map": "/gprstorage-client/static/js/runtime-main.0e73e67e.js.map",
     "static/css/2.d9ad5f5c.chunk.css": "/gprstorage-client/static/css/2.d9ad5f5c.chunk.css",
     "static/js/2.98bd8367.chunk.js": "/gprstorage-client/static/js/2.98bd8367.chunk.js",
     "static/js/2.98bd8367.chunk.js.map": "/gprstorage-client/static/js/2.98bd8367.chunk.js.map",
     "index.html": "/gprstorage-client/index.html",
-    "precache-manifest.36437722e7d93b791055a39c2b86fbd3.js": "/gprstorage-client/precache-manifest.36437722e7d93b791055a39c2b86fbd3.js",
+    "precache-manifest.fcf755eff1b252dba8d13b484ee4500a.js": "/gprstorage-client/precache-manifest.fcf755eff1b252dba8d13b484ee4500a.js",
     "service-worker.js": "/gprstorage-client/service-worker.js",
     "static/css/2.d9ad5f5c.chunk.css.map": "/gprstorage-client/static/css/2.d9ad5f5c.chunk.css.map",
     "static/css/main.5ecd60fb.chunk.css.map": "/gprstorage-client/static/css/main.5ecd60fb.chunk.css.map",
@@ -20,6 +20,6 @@
     "static/css/2.d9ad5f5c.chunk.css",
     "static/js/2.98bd8367.chunk.js",
     "static/css/main.5ecd60fb.chunk.css",
-    "static/js/main.38a63e78.chunk.js"
+    "static/js/main.070f7325.chunk.js"
   ]
 }
