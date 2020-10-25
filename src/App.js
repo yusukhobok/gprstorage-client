@@ -22,6 +22,10 @@ class App extends React.Component {
       is_loaded_data: false,
       waiting: false,
       tracesCountOnPage: 100,
+      username: null,
+      projects: [],
+      currentProjectId: null,
+      radargrams: [],
     };
 
   }
@@ -44,8 +48,16 @@ class App extends React.Component {
   registrate = async (username, password) => {
     const res = await this.logic.authLogic.registrate(username, password);
     if (res["status"] === OK_STATUS) {
-      this.getProjects();
-      this.updateState({ "status": STATUS_LOGGED, sign_error: null });
+      await this.getProjects();
+      this.updateState({ 
+        "status": STATUS_LOGGED, 
+        sign_error: null, 
+        username: this.logic.authLogic.username,
+        page: PAGE_PROJECTS,
+        projects: this.logic.projects,
+        currentProjectId: this.logic.currentProjectId,
+        radargrams: this.logic.radargrams
+       });
     }
     else
       this.updateState({ sign_error: res["message"] });
@@ -55,8 +67,16 @@ class App extends React.Component {
   logIn = async (username, password) => {
     const res = await this.logic.authLogic.logIn(username, password);
     if (res["status"] === OK_STATUS) {
-      this.getProjects();
-      this.updateState({ "status": STATUS_LOGGED, sign_error: null });
+      await this.getProjects();
+      this.updateState({ 
+        "status": STATUS_LOGGED, 
+        sign_error: null, 
+        username: this.logic.authLogic.username,
+        page: PAGE_PROJECTS,
+        projects: this.logic.projects,
+        currentProjectId: this.logic.currentProjectId,
+        radargrams: this.logic.radargrams
+      });
     }
     else
       this.updateState({ sign_error: res["message"] });
@@ -65,7 +85,7 @@ class App extends React.Component {
 
 
   logOut = async () => {
-    this.updateState({ "status": STATUS_NOT_LOGGED, sign_error: null });
+    this.updateState({ "status": STATUS_NOT_LOGGED, sign_error: null, username: null });
   }
 
 
@@ -74,7 +94,12 @@ class App extends React.Component {
     this.updateState({ waiting: true });
     const res = await this.logic.getProjects()
     if (res["status"] === OK_STATUS)
-      this.updateState({ is_loaded_data: true, waiting: false })
+      this.updateState({
+        is_loaded_data: true,
+        waiting: false,
+        projects: this.logic.projects,
+        currentProjectId: this.logic.currentProjectId
+      })
     else
       this.updateState({ waiting: false })
   }
@@ -85,7 +110,12 @@ class App extends React.Component {
     this.updateState({ waiting: true });
     const res = await this.logic.addProject(name, notes)
     if (res["status"] === OK_STATUS)
-      this.updateState({ is_loaded_data: true, waiting: false })
+      this.updateState({
+        is_loaded_data: true,
+        waiting: false,
+        projects: this.logic.projects,
+        currentProjectId: this.logic.currentProjectId
+      })
     else
       this.updateState({ waiting: false })
   }
@@ -96,7 +126,12 @@ class App extends React.Component {
     this.updateState({ waiting: true });
     const res = await this.logic.updateProject(projectId, name, notes)
     if (res["status"] === OK_STATUS)
-      this.updateState({ is_loaded_data: true, waiting: false })
+      this.updateState({
+        is_loaded_data: true,
+        waiting: false,
+        projects: this.logic.projects,
+        currentProjectId: this.logic.currentProjectId
+      })
     else
       this.updateState({ waiting: false })
   }
@@ -107,7 +142,12 @@ class App extends React.Component {
     this.updateState({ waiting: true });
     const res = await this.logic.deleteProject(projectId)
     if (res["status"] === OK_STATUS)
-      this.updateState({ is_loaded_data: true, waiting: false })
+      this.updateState({
+        is_loaded_data: true,
+        waiting: false,
+        projects: this.logic.projects,
+        currentProjectId: this.logic.currentProjectId
+      })
     else
       this.updateState({ waiting: false })
   }
@@ -117,7 +157,12 @@ class App extends React.Component {
     this.updateState({ waiting: true });
     const res = await this.logic.openProject(projectId)
     if (res["status"] === OK_STATUS) {
-      this.updateState({ is_loaded_data: true, waiting: false, page: PAGE_RADARGRAMS })
+      this.updateState({ 
+        is_loaded_data: true, 
+        waiting: false, 
+        page: PAGE_RADARGRAMS, 
+        radargrams: this.logic.radargrams 
+      })
     }
     else {
       this.updateState({ waiting: false, page: PAGE_PROJECTS })
@@ -134,7 +179,7 @@ class App extends React.Component {
     this.updateState({ waiting: true });
     const res = await this.logic.deleteRadargram(projectId, radargramId)
     if (res["status"] === OK_STATUS)
-      this.updateState({ waiting: false, page: PAGE_PROJECTS })
+      this.updateState({ waiting: false, page: PAGE_PROJECTS, radargrams: this.logic.radargrams })
     else
       this.updateState({ waiting: false })
   }
@@ -153,7 +198,7 @@ class App extends React.Component {
     if (res["status"] === OK_STATUS) {
       const res = await this.logic.openProject(projectId)
       if (res["status"] === OK_STATUS) {
-        this.updateState({ waiting: false, page: PAGE_RADARGRAMS })
+        this.updateState({ waiting: false, page: PAGE_RADARGRAMS, radargrams: this.logic.radargrams })
       }
       else {
         this.updateState({ waiting: false, page: PAGE_PROJECTS })
@@ -165,7 +210,7 @@ class App extends React.Component {
     }
   }
 
-  getTraces = async(projectId, radargramId, startNum, finishNum, stage) => {
+  getTraces = async (projectId, radargramId, startNum, finishNum, stage) => {
     const res = await this.logic.getTraces(projectId, radargramId, startNum, finishNum, stage);
     return res;
   }
@@ -194,8 +239,8 @@ class App extends React.Component {
       case PAGE_PROJECTS:
         return (
           <Projects
-            projects={this.logic.projects}
-            currentProjectId={this.logic.currentProjectId}
+            projects={this.state.projects}
+            currentProjectId={this.state.currentProjectId}
             addProject={this.addProject}
             changeProject={this.changeProject}
             openProject={this.openProject}
@@ -204,8 +249,8 @@ class App extends React.Component {
         )
       case PAGE_RADARGRAMS:
         return (
-          <Radargrams 
-            radargrams={this.logic.radargrams}
+          <Radargrams
+            radargrams={this.state.radargrams}
             project={this.logic.getCurrentProject()}
             closeProject={this.closeProject}
             deleteRadargram={this.deleteRadargram}
@@ -245,7 +290,7 @@ class App extends React.Component {
     }
     return (
       <Fragment>
-        <MainMenu username={this.logic.authLogic.username} logged={this.state.status === STATUS_LOGGED} onSelectMenuElement={this.onSelectMenuElement} />
+        <MainMenu username={this.state.username} logged={this.state.status === STATUS_LOGGED} onSelectMenuElement={this.onSelectMenuElement} />
         {CurrentComponent}
       </Fragment>
     )
